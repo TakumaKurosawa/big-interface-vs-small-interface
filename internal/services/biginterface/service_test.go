@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
+	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/biginterface/mocks"
 	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/domain"
-	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/mocks"
 )
 
 func TestUserService_GetUser(t *testing.T) {

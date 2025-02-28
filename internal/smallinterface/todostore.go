@@ -6,7 +6,7 @@ import (
 	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/domain"
 )
 
-//go:generate mockgen -destination=../mocks/mock_todostore.go -package=mocks github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/smallinterface TodoStore
+//go:generate mockgen -destination=./mocks/mock_todostore.go -package=mocks github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/smallinterface TodoStore
 
 // TodoStore はTodo関連の操作のみを定義した小さなインターフェースです
 // これは凝集度が高いアプローチの例です

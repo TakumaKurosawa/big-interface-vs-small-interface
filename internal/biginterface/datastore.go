@@ -6,7 +6,7 @@ import (
 	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/domain"
 )
 
-//go:generate mockgen -destination=../mocks/mock_datastore.go -package=mocks github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/biginterface DataStore
+//go:generate mockgen -destination=./mocks/mock_datastore.go -package=mocks github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/biginterface DataStore
 
 // DataStore は全てのデータ操作を一つの大きなインターフェースとして定義します
 // これは凝集度が低いアプローチの例です

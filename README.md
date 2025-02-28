@@ -45,21 +45,22 @@ go test ./...
 ├── internal/                   # 外部からインポートされるべきでないパッケージ
 │   ├── domain/                 # ドメインモデル
 │   ├── biginterface/           # Big Interfaceアプローチの定義
-│   │   └── datastore.go        # 大きなインターフェース定義
+│   │   ├── datastore.go        # 大きなインターフェース定義
+│   │   └── mocks/              # Big Interfaceのモック
+│   │       └── mock_datastore.go # DataStoreモック
 │   ├── smallinterface/         # Small Interfaceアプローチの定義
 │   │   ├── userstore.go        # ユーザー関連の小さなインターフェース
-│   │   └── todostore.go        # Todo関連の小さなインターフェース
-│   ├── services/               # サービス実装
-│   │   ├── biginterface/       # Big Interfaceアプローチのサービス実装
-│   │   │   ├── service.go      # サービス実装
-│   │   │   └── service_test.go # サービステスト
-│   │   └── smallinterface/     # Small Interfaceアプローチのサービス実装
-│   │       ├── service.go      # サービス実装
-│   │       └── service_test.go # サービステスト
-│   └── mocks/                  # モック実装
-│       ├── mock_datastore.go   # 大きなインターフェースのモック
-│       ├── mock_userstore.go   # ユーザーストアのモック
-│       └── mock_todostore.go   # Todoストアのモック
+│   │   ├── todostore.go        # Todo関連の小さなインターフェース
+│   │   └── mocks/              # Small Interfaceのモック
+│   │       ├── mock_userstore.go # UserStoreモック
+│   │       └── mock_todostore.go # TodoStoreモック
+│   └── services/               # サービス実装
+│       ├── biginterface/       # Big Interfaceアプローチのサービス実装
+│       │   ├── service.go      # サービス実装
+│       │   └── service_test.go # サービステスト
+│       └── smallinterface/     # Small Interfaceアプローチのサービス実装
+│           ├── service.go      # サービス実装
+│           └── service_test.go # サービステスト
 ├── pkg/                        # 外部からインポートできるパッケージ
 │   └── greeting/               # 共通モジュール
 ├── go.mod                      # Goモジュール定義
