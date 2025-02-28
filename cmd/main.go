@@ -17,14 +17,14 @@ import (
 func main() {
 	ctx := context.Background()
 
-	// 共通のデータストアを作成
+	// Create a common data store
 	store := inmemory.NewStore()
 
-	// サンプルデータを作成
+	// Create sample data
 	user := &domain.User{
 		ID:        "user1",
-		Name:      "山田 太郎",
-		Email:     "yamada@example.com",
+		Name:      "John Doe",
+		Email:     "john@example.com",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -32,87 +32,87 @@ func main() {
 	todo := &domain.Todo{
 		ID:          "todo1",
 		UserID:      "user1",
-		Title:       "インターフェース設計の比較",
-		Description: "大きなインターフェースと小さなインターフェースの違いを検証する",
+		Title:       "Interface Design Comparison",
+		Description: "Verify the differences between large and small interfaces",
 		Completed:   false,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
 
-	// データを保存
+	// Save data
 	if err := store.CreateUser(ctx, user); err != nil {
-		log.Fatalf("ユーザー作成エラー: %v", err)
+		log.Fatalf("User creation error: %v", err)
 	}
 
 	if err := store.CreateTodo(ctx, todo); err != nil {
-		log.Fatalf("Todo作成エラー: %v", err)
+		log.Fatalf("Todo creation error: %v", err)
 	}
 
-	fmt.Println("===== 大きなインターフェースアプローチ =====")
-	// 大きなインターフェースアプローチ
+	fmt.Println("===== Big Interface Approach =====")
+	// Big interface approach
 	bigUserService := bigservice.NewUserService(store)
 	bigTodoService := bigservice.NewTodoService(store)
 
-	// ユーザー情報を取得
+	// Get user information
 	fetchedUser, err := bigUserService.GetUser(ctx, "user1")
 	if err != nil {
-		log.Fatalf("ユーザー取得エラー: %v", err)
+		log.Fatalf("User retrieval error: %v", err)
 	}
-	fmt.Printf("ユーザー: %s (%s)\n", fetchedUser.Name, fetchedUser.Email)
+	fmt.Printf("User: %s (%s)\n", fetchedUser.Name, fetchedUser.Email)
 
-	// Todoリストを取得
+	// Get Todo list
 	todos, err := bigTodoService.GetUserTodos(ctx, "user1")
 	if err != nil {
-		log.Fatalf("Todo取得エラー: %v", err)
+		log.Fatalf("Todo retrieval error: %v", err)
 	}
 
-	fmt.Println("Todoリスト:")
+	fmt.Println("Todo List:")
 	for _, t := range todos {
-		status := "未完了"
+		status := "Incomplete"
 		if t.Completed {
-			status = "完了"
+			status = "Complete"
 		}
 		fmt.Printf("- %s: %s (%s)\n", t.Title, t.Description, status)
 	}
 
-	fmt.Println("\n===== 小さなインターフェースアプローチ =====")
-	// 小さなインターフェースアプローチ
+	fmt.Println("\n===== Small Interface Approach =====")
+	// Small interface approach
 	smallUserService := smallservice.NewUserService(store)
 	smallTodoService := smallservice.NewTodoService(store, store)
 
-	// ユーザー情報を取得
+	// Get user information
 	fetchedUser, err = smallUserService.GetUser(ctx, "user1")
 	if err != nil {
-		log.Fatalf("ユーザー取得エラー: %v", err)
+		log.Fatalf("User retrieval error: %v", err)
 	}
-	fmt.Printf("ユーザー: %s (%s)\n", fetchedUser.Name, fetchedUser.Email)
+	fmt.Printf("User: %s (%s)\n", fetchedUser.Name, fetchedUser.Email)
 
-	// Todoリストを取得
+	// Get Todo list
 	todos, err = smallTodoService.GetUserTodos(ctx, "user1")
 	if err != nil {
-		log.Fatalf("Todo取得エラー: %v", err)
+		log.Fatalf("Todo retrieval error: %v", err)
 	}
 
-	fmt.Println("Todoリスト:")
+	fmt.Println("Todo List:")
 	for _, t := range todos {
-		status := "未完了"
+		status := "Incomplete"
 		if t.Completed {
-			status = "完了"
+			status = "Complete"
 		}
 		fmt.Printf("- %s: %s (%s)\n", t.Title, t.Description, status)
 	}
 
-	// Todoを完了にする
+	// Mark Todo as complete
 	if err := smallTodoService.CompleteTodo(ctx, "todo1"); err != nil {
-		log.Fatalf("Todo更新エラー: %v", err)
+		log.Fatalf("Todo update error: %v", err)
 	}
 
-	fmt.Println("\n===== Todo完了後 =====")
+	fmt.Println("\n===== After Todo Completion =====")
 	todos, _ = smallTodoService.GetUserTodos(ctx, "user1")
 	for _, t := range todos {
-		status := "未完了"
+		status := "Incomplete"
 		if t.Completed {
-			status = "完了"
+			status = "Complete"
 		}
 		fmt.Printf("- %s: %s (%s)\n", t.Title, t.Description, status)
 	}

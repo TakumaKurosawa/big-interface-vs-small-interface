@@ -8,8 +8,8 @@ import (
 
 //go:generate mockgen -destination=./mocks/mock_userstore.go -package=mocks github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/smallinterface UserStore
 
-// UserStore はユーザー関連の操作のみを定義した小さなインターフェースです
-// これは凝集度が高いアプローチの例です
+// UserStore is a small interface that defines only user-related operations
+// This is an example of a high cohesion approach
 type UserStore interface {
 	GetUser(ctx context.Context, id string) (*domain.User, error)
 	ListUsers(ctx context.Context) ([]*domain.User, error)

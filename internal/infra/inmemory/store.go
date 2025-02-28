@@ -10,7 +10,7 @@ import (
 	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/smallinterface"
 )
 
-// Store は両方のインターフェースを満たすための実装
+// Store is an implementation that satisfies both interfaces
 type Store struct {
 	users map[string]*domain.User
 	todos map[string]*domain.Todo
@@ -20,7 +20,7 @@ var _ biginterface.DataStore = (*Store)(nil)
 var _ smallinterface.UserStore = (*Store)(nil)
 var _ smallinterface.TodoStore = (*Store)(nil)
 
-// NewStore は新しいインメモリストアを生成します
+// NewStore creates a new in-memory store
 func NewStore() *Store {
 	return &Store{
 		users: make(map[string]*domain.User),
@@ -28,7 +28,7 @@ func NewStore() *Store {
 	}
 }
 
-// ユーザー関連の操作
+// User-related operations
 func (s *Store) GetUser(ctx context.Context, id string) (*domain.User, error) {
 	user, ok := s.users[id]
 	if !ok {
@@ -69,7 +69,7 @@ func (s *Store) DeleteUser(ctx context.Context, id string) error {
 	return nil
 }
 
-// Todo関連の操作
+// Todo-related operations
 func (s *Store) GetTodo(ctx context.Context, id string) (*domain.Todo, error) {
 	todo, ok := s.todos[id]
 	if !ok {

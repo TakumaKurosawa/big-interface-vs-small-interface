@@ -1,76 +1,76 @@
-# インターフェースサイズと凝集度の比較
+# Interface Size and Cohesion Comparison
 
-このプロジェクトはインターフェースの大きさによるコードの凝集度の違いを証明するためのサンプルです。
+This project is a sample to demonstrate the difference in code cohesion based on interface size.
 
-## 概要
+## Overview
 
-このリポジトリでは、以下の 2 つのアプローチを比較しています：
+This repository compares two approaches:
 
-1. **Big Interface アプローチ**：
+1. **Big Interface Approach**:
 
-   - 大きな単一インターフェース（`datastore`）を使用
-   - すべてのデータ操作を 1 つのインターフェースにまとめる
-   - 凝集度が低く、不要な関数の Behavior も定義する必要がある
+   - Uses a large single interface (`datastore`)
+   - Combines all data operations into one interface
+   - Low cohesion, requiring definition of unnecessary function behaviors
 
-2. **Small Interface アプローチ**：
-   - 小さく特化したインターフェース（`userstore`, `todostore`）を使用
-   - 各ドメインロジックに必要な操作のみを定義
-   - 高い凝集度で、必要なものだけを利用できる
+2. **Small Interface Approach**:
+   - Uses small specialized interfaces (`userstore`, `todostore`)
+   - Defines only operations necessary for each domain logic
+   - High cohesion, allowing use of only what's needed
 
-## インストール方法
+## Installation
 
 ```bash
-# リポジトリをクローン
+# Clone the repository
 git clone https://github.com/TakumaKurosawa/big-interface-vs-small-interface.git
 
-# ディレクトリに移動
+# Move to the directory
 cd big-interface-vs-small-interface
 
-# 依存関係をインストール
+# Install dependencies
 go mod download
 ```
 
-## テスト実行
+## Running Tests
 
 ```bash
-# すべてのテストを実行
+# Run all tests
 go test ./...
 ```
 
-## プロジェクト構造
+## Project Structure
 
 ```
 .
-├── cmd/                        # メインアプリケーションのエントリーポイント
-├── internal/                   # 外部からインポートされるべきでないパッケージ
-│   ├── domain/                 # ドメインモデル
-│   ├── biginterface/           # Big Interfaceアプローチの定義
-│   │   ├── datastore.go        # 大きなインターフェース定義
-│   │   └── mocks/              # Big Interfaceのモック
-│   │       └── mock_datastore.go # DataStoreモック
-│   ├── smallinterface/         # Small Interfaceアプローチの定義
-│   │   ├── userstore.go        # ユーザー関連の小さなインターフェース
-│   │   ├── todostore.go        # Todo関連の小さなインターフェース
-│   │   └── mocks/              # Small Interfaceのモック
-│   │       ├── mock_userstore.go # UserStoreモック
-│   │       └── mock_todostore.go # TodoStoreモック
-│   ├── infra/                  # インフラストラクチャ層の実装
-│   │   └── inmemory/           # インメモリ実装
-│   │       └── store.go        # インメモリストア実装
-│   └── services/               # サービス実装
-│       ├── biginterface/       # Big Interfaceアプローチのサービス実装
-│       │   ├── service.go      # サービス実装
-│       │   └── service_test.go # サービステスト
-│       └── smallinterface/     # Small Interfaceアプローチのサービス実装
-│           ├── service.go      # サービス実装
-│           └── service_test.go # サービステスト
-├── pkg/                        # 外部からインポートできるパッケージ
-│   └── greeting/               # 共通モジュール
-├── go.mod                      # Goモジュール定義
-├── go.sum                      # 依存関係のチェックサム
-└── README.md                   # このファイル
+├── cmd/                        # Main application entry point
+├── internal/                   # Packages that should not be imported externally
+│   ├── domain/                 # Domain models
+│   ├── biginterface/           # Big Interface approach definition
+│   │   ├── datastore.go        # Large interface definition
+│   │   └── mocks/              # Big Interface mocks
+│   │       └── mock_datastore.go # DataStore mock
+│   ├── smallinterface/         # Small Interface approach definition
+│   │   ├── userstore.go        # User-related small interface
+│   │   ├── todostore.go        # Todo-related small interface
+│   │   └── mocks/              # Small Interface mocks
+│   │       ├── mock_userstore.go # UserStore mock
+│   │       └── mock_todostore.go # TodoStore mock
+│   ├── infra/                  # Infrastructure layer implementation
+│   │   └── inmemory/           # In-memory implementation
+│   │       └── store.go        # In-memory store implementation
+│   └── services/               # Service implementations
+│       ├── biginterface/       # Big Interface approach service implementation
+│       │   ├── service.go      # Service implementation
+│       │   └── service_test.go # Service tests
+│       └── smallinterface/     # Small Interface approach service implementation
+│           ├── service.go      # Service implementation
+│           └── service_test.go # Service tests
+├── pkg/                        # Packages that can be imported externally
+│   └── greeting/               # Common modules
+├── go.mod                      # Go module definition
+├── go.sum                      # Dependency checksums
+└── README.md                   # This file
 ```
 
-## ライセンス
+## License
 
 MIT

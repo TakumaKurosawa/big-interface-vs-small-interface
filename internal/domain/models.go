@@ -2,7 +2,7 @@ package domain
 
 import "time"
 
-// User はユーザー情報を表す構造体です
+// User represents user information
 type User struct {
 	ID        string    `json:"id"`
 	Name      string    `json:"name"`
@@ -11,7 +11,7 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// Todo はTodoアイテムを表す構造体です
+// Todo represents a Todo item
 type Todo struct {
 	ID          string    `json:"id"`
 	UserID      string    `json:"user_id"`

@@ -15,19 +15,18 @@ import (
 )
 
 func TestUserService_GetUser(t *testing.T) {
-	// テストケースの定義
 	tests := map[string]struct {
 		userID      string
 		mockSetup   func(mock *mocks.MockUserStore) *domain.User
 		expectErr   bool
 		expectedErr string
 	}{
-		"正常系：ユーザーが取得できる場合": {
+		"Success: User exists": {
 			userID: "user1",
 			mockSetup: func(mock *mocks.MockUserStore) *domain.User {
 				mockUser := &domain.User{
 					ID:        "user1",
-					Name:      "テスト ユーザー",
+					Name:      "Test User",
 					Email:     "test@example.com",
 					CreatedAt: time.Now(),
 					UpdatedAt: time.Now(),
@@ -39,7 +38,7 @@ func TestUserService_GetUser(t *testing.T) {
 			},
 			expectErr: false,
 		},
-		"異常系：ユーザーが存在しない場合": {
+		"Error: User not found": {
 			userID: "nonexistent",
 			mockSetup: func(mock *mocks.MockUserStore) *domain.User {
 				mock.EXPECT().
@@ -52,23 +51,18 @@ func TestUserService_GetUser(t *testing.T) {
 		},
 	}
 
-	// 各テストケースを実行
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			// モックのセットアップ
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 			mockStore := mocks.NewMockUserStore(ctrl)
 			expectedUser := tt.mockSetup(mockStore)
 
-			// サービスの作成
 			service := NewUserService(mockStore)
 
-			// テスト対象メソッドの実行
 			ctx := context.Background()
 			user, err := service.GetUser(ctx, tt.userID)
 
-			// 結果の検証
 			if tt.expectErr {
 				require.Error(t, err)
 				if tt.expectedErr != "" {
@@ -84,7 +78,6 @@ func TestUserService_GetUser(t *testing.T) {
 }
 
 func TestTodoService_GetUserTodos(t *testing.T) {
-	// テストケースの定義
 	tests := map[string]struct {
 		userID        string
 		mockUserStore func(mock *mocks.MockUserStore)
@@ -92,12 +85,12 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 		expectErr     bool
 		expectedErr   string
 	}{
-		"正常系：ユーザーとTodoが存在する場合": {
+		"Success: User and todos exist": {
 			userID: "user1",
 			mockUserStore: func(mock *mocks.MockUserStore) {
 				mockUser := &domain.User{
 					ID:        "user1",
-					Name:      "テスト ユーザー",
+					Name:      "Test User",
 					Email:     "test@example.com",
 					CreatedAt: time.Now(),
 					UpdatedAt: time.Now(),
@@ -111,8 +104,8 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 					{
 						ID:          "todo1",
 						UserID:      "user1",
-						Title:       "テストTodo",
-						Description: "これはテスト用のTodoです",
+						Title:       "Test Todo",
+						Description: "This is a test todo",
 						Completed:   false,
 						CreatedAt:   time.Now(),
 						UpdatedAt:   time.Now(),
@@ -125,7 +118,7 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 			},
 			expectErr: false,
 		},
-		"異常系：ユーザーが存在しない場合": {
+		"Error: User not found": {
 			userID: "nonexistent",
 			mockUserStore: func(mock *mocks.MockUserStore) {
 				mock.EXPECT().
@@ -133,7 +126,6 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 					Return(nil, errors.New("user not found"))
 			},
 			mockTodoStore: func(mock *mocks.MockTodoStore) []*domain.Todo {
-				// この場合、TodoStoreのメソッドは呼ばれないので、モックセットアップは不要
 				return nil
 			},
 			expectErr:   true,
@@ -141,10 +133,8 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 		},
 	}
 
-	// 各テストケースを実行
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			// モックのセットアップ
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 			mockUserStore := mocks.NewMockUserStore(ctrl)
@@ -153,14 +143,11 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 			tt.mockUserStore(mockUserStore)
 			expectedTodos := tt.mockTodoStore(mockTodoStore)
 
-			// サービスの作成
 			service := NewTodoService(mockTodoStore, mockUserStore)
 
-			// テスト対象メソッドの実行
 			ctx := context.Background()
 			todos, err := service.GetUserTodos(ctx, tt.userID)
 
-			// 結果の検証
 			if tt.expectErr {
 				require.Error(t, err)
 				if tt.expectedErr != "" {
@@ -176,14 +163,13 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 }
 
 func TestTodoService_CompleteTodo(t *testing.T) {
-	// テストケースの定義
 	tests := map[string]struct {
 		todoID      string
 		mockSetup   func(mock *mocks.MockTodoStore)
 		expectErr   bool
 		expectedErr string
 	}{
-		"正常系：Todoを完了状態にできる場合": {
+		"Success: Todo marked as complete": {
 			todoID: "todo1",
 			mockSetup: func(mock *mocks.MockTodoStore) {
 				mock.EXPECT().
@@ -192,7 +178,7 @@ func TestTodoService_CompleteTodo(t *testing.T) {
 			},
 			expectErr: false,
 		},
-		"異常系：Todoが存在しない場合": {
+		"Error: Todo not found": {
 			todoID: "nonexistent",
 			mockSetup: func(mock *mocks.MockTodoStore) {
 				mock.EXPECT().
@@ -204,24 +190,19 @@ func TestTodoService_CompleteTodo(t *testing.T) {
 		},
 	}
 
-	// 各テストケースを実行
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			// モックのセットアップ
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 			mockTodoStore := mocks.NewMockTodoStore(ctrl)
 			mockUserStore := mocks.NewMockUserStore(ctrl)
 			tt.mockSetup(mockTodoStore)
 
-			// サービスの作成
 			service := NewTodoService(mockTodoStore, mockUserStore)
 
-			// テスト対象メソッドの実行
 			ctx := context.Background()
 			err := service.CompleteTodo(ctx, tt.todoID)
 
-			// 結果の検証
 			if tt.expectErr {
 				require.Error(t, err)
 				if tt.expectedErr != "" {

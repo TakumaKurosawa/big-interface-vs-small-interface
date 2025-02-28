@@ -8,44 +8,44 @@ import (
 	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/domain"
 )
 
-// UserService はユーザー関連の操作を提供するサービスです
+// UserService is a service that provides user-related operations
 type UserService struct {
-	store biginterface.DataStore // 大きなインターフェースを使用
+	store biginterface.DataStore // Using the big interface
 }
 
-// NewUserService は新しいUserServiceを作成します
+// NewUserService creates a new UserService
 func NewUserService(store biginterface.DataStore) *UserService {
 	return &UserService{
 		store: store,
 	}
 }
 
-// GetUser はユーザーを取得します
+// GetUser retrieves a user
 func (s *UserService) GetUser(ctx context.Context, id string) (*domain.User, error) {
 	return s.store.GetUser(ctx, id)
 }
 
-// CreateUser は新しいユーザーを作成します
+// CreateUser creates a new user
 func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 	return s.store.CreateUser(ctx, user)
 }
 
-// TodoService はTodo関連の操作を提供するサービスです
+// TodoService is a service that provides Todo-related operations
 type TodoService struct {
-	store biginterface.DataStore // 同じ大きなインターフェースを使用
+	store biginterface.DataStore // Using the same big interface
 }
 
-// NewTodoService は新しいTodoServiceを作成します
+// NewTodoService creates a new TodoService
 func NewTodoService(store biginterface.DataStore) *TodoService {
 	return &TodoService{
 		store: store,
 	}
 }
 
-// GetUserTodos はユーザーのTodoリストを取得します
+// GetUserTodos retrieves a user's Todo list
 func (s *TodoService) GetUserTodos(ctx context.Context, userID string) ([]*domain.Todo, error) {
-	// ユーザーの存在を確認する必要がある場合、
-	// ここでも大きなインターフェースを通じてユーザー情報にアクセスできる
+	// When we need to check if a user exists,
+	// we can access user information through the big interface here as well
 	_, err := s.store.GetUser(ctx, userID)
 	if err != nil {
 		return nil, errors.New("user not found")
@@ -54,9 +54,9 @@ func (s *TodoService) GetUserTodos(ctx context.Context, userID string) ([]*domai
 	return s.store.ListUserTodos(ctx, userID)
 }
 
-// CreateTodo は新しいTodoを作成します
+// CreateTodo creates a new Todo
 func (s *TodoService) CreateTodo(ctx context.Context, todo *domain.Todo) error {
-	// ユーザー存在確認
+	// Check if user exists
 	_, err := s.store.GetUser(ctx, todo.UserID)
 	if err != nil {
 		return errors.New("cannot create todo for non-existent user")
@@ -65,7 +65,7 @@ func (s *TodoService) CreateTodo(ctx context.Context, todo *domain.Todo) error {
 	return s.store.CreateTodo(ctx, todo)
 }
 
-// CompleteTodo はTodoを完了状態にします
+// CompleteTodo marks a Todo as complete
 func (s *TodoService) CompleteTodo(ctx context.Context, id string) error {
 	return s.store.MarkTodoComplete(ctx, id)
 }
