@@ -54,6 +54,9 @@ go test ./...
 │   │   └── mocks/              # Small Interfaceのモック
 │   │       ├── mock_userstore.go # UserStoreモック
 │   │       └── mock_todostore.go # TodoStoreモック
+│   ├── infra/                  # インフラストラクチャ層の実装
+│   │   └── inmemory/           # インメモリ実装
+│   │       └── store.go        # インメモリストア実装
 │   └── services/               # サービス実装
 │       ├── biginterface/       # Big Interfaceアプローチのサービス実装
 │       │   ├── service.go      # サービス実装
