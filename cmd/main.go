@@ -6,9 +6,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/biginterface"
 	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/domain"
-	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/smallinterface"
+	bigservice "github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/services/biginterface"
+	smallservice "github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/services/smallinterface"
 )
 
 // InMemoryStore は両方のインターフェースを満たすための実装
@@ -162,8 +162,8 @@ func main() {
 
 	fmt.Println("===== 大きなインターフェースアプローチ =====")
 	// 大きなインターフェースアプローチ
-	bigUserService := biginterface.NewUserService(store)
-	bigTodoService := biginterface.NewTodoService(store)
+	bigUserService := bigservice.NewUserService(store)
+	bigTodoService := bigservice.NewTodoService(store)
 
 	// ユーザー情報を取得
 	fetchedUser, err := bigUserService.GetUser(ctx, "user1")
@@ -189,8 +189,8 @@ func main() {
 
 	fmt.Println("\n===== 小さなインターフェースアプローチ =====")
 	// 小さなインターフェースアプローチ
-	smallUserService := smallinterface.NewUserService(store)
-	smallTodoService := smallinterface.NewTodoService(store, store)
+	smallUserService := smallservice.NewUserService(store)
+	smallTodoService := smallservice.NewTodoService(store, store)
 
 	// ユーザー情報を取得
 	fetchedUser, err = smallUserService.GetUser(ctx, "user1")

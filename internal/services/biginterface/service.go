@@ -4,16 +4,17 @@ import (
 	"context"
 	"errors"
 
+	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/biginterface"
 	"github.com/TakumaKurosawa/big-interface-vs-small-interface/internal/domain"
 )
 
 // UserService はユーザー関連の操作を提供するサービスです
 type UserService struct {
-	store DataStore // 大きなインターフェースを使用
+	store biginterface.DataStore // 大きなインターフェースを使用
 }
 
 // NewUserService は新しいUserServiceを作成します
-func NewUserService(store DataStore) *UserService {
+func NewUserService(store biginterface.DataStore) *UserService {
 	return &UserService{
 		store: store,
 	}
@@ -31,11 +32,11 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 
 // TodoService はTodo関連の操作を提供するサービスです
 type TodoService struct {
-	store DataStore // 同じ大きなインターフェースを使用
+	store biginterface.DataStore // 同じ大きなインターフェースを使用
 }
 
 // NewTodoService は新しいTodoServiceを作成します
-func NewTodoService(store DataStore) *TodoService {
+func NewTodoService(store biginterface.DataStore) *TodoService {
 	return &TodoService{
 		store: store,
 	}

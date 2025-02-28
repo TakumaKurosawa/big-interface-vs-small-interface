@@ -44,15 +44,24 @@ go test ./...
 ├── cmd/                        # メインアプリケーションのエントリーポイント
 ├── internal/                   # 外部からインポートされるべきでないパッケージ
 │   ├── domain/                 # ドメインモデル
-│   ├── biginterface/           # Big Interfaceアプローチの実装
-│   │   ├── datastore.go        # 大きなインターフェース定義
-│   │   └── service.go          # サービス実装
-│   └── smallinterface/         # Small Interfaceアプローチの実装
-│       ├── userstore.go        # ユーザー関連の小さなインターフェース
-│       ├── todostore.go        # Todo関連の小さなインターフェース
-│       └── service.go          # サービス実装
+│   ├── biginterface/           # Big Interfaceアプローチの定義
+│   │   └── datastore.go        # 大きなインターフェース定義
+│   ├── smallinterface/         # Small Interfaceアプローチの定義
+│   │   ├── userstore.go        # ユーザー関連の小さなインターフェース
+│   │   └── todostore.go        # Todo関連の小さなインターフェース
+│   ├── services/               # サービス実装
+│   │   ├── biginterface/       # Big Interfaceアプローチのサービス実装
+│   │   │   ├── service.go      # サービス実装
+│   │   │   └── service_test.go # サービステスト
+│   │   └── smallinterface/     # Small Interfaceアプローチのサービス実装
+│   │       ├── service.go      # サービス実装
+│   │       └── service_test.go # サービステスト
+│   └── mocks/                  # モック実装
+│       ├── mock_datastore.go   # 大きなインターフェースのモック
+│       ├── mock_userstore.go   # ユーザーストアのモック
+│       └── mock_todostore.go   # Todoストアのモック
 ├── pkg/                        # 外部からインポートできるパッケージ
-│   └── models/                 # 共通モデル
+│   └── greeting/               # 共通モジュール
 ├── go.mod                      # Goモジュール定義
 ├── go.sum                      # 依存関係のチェックサム
 └── README.md                   # このファイル
