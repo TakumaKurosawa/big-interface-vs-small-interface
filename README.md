@@ -1,41 +1,61 @@
-# シンプルな Go プロジェクト
+# インターフェースサイズと凝集度の比較
 
-これはシンプルな Go プロジェクトのテンプレートです。
+このプロジェクトはインターフェースの大きさによるコードの凝集度の違いを証明するためのサンプルです。
 
 ## 概要
 
-このリポジトリは基本的な Go プロジェクトの構造を示しています。
+このリポジトリでは、以下の 2 つのアプローチを比較しています：
+
+1. **Big Interface アプローチ**：
+
+   - 大きな単一インターフェース（`datastore`）を使用
+   - すべてのデータ操作を 1 つのインターフェースにまとめる
+   - 凝集度が低く、不要な関数の Behavior も定義する必要がある
+
+2. **Small Interface アプローチ**：
+   - 小さく特化したインターフェース（`userstore`, `todostore`）を使用
+   - 各ドメインロジックに必要な操作のみを定義
+   - 高い凝集度で、必要なものだけを利用できる
 
 ## インストール方法
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/yourusername/simple-go-project.git
+git clone https://github.com/TakumaKurosawa/big-interface-vs-small-interface.git
 
 # ディレクトリに移動
-cd simple-go-project
+cd big-interface-vs-small-interface
 
-# 依存関係をインストール（必要な場合）
+# 依存関係をインストール
 go mod download
 ```
 
-## 使用方法
+## テスト実行
 
 ```bash
-# アプリケーションを実行
-go run ./cmd/main.go
+# すべてのテストを実行
+go test ./...
 ```
 
 ## プロジェクト構造
 
 ```
 .
-├── cmd/            # メインアプリケーションのエントリーポイント
-├── internal/       # 外部からインポートされるべきでないパッケージ
-├── pkg/            # 外部からインポートできるパッケージ
-├── go.mod          # Goモジュール定義
-├── go.sum          # 依存関係のチェックサム
-└── README.md       # このファイル
+├── cmd/                        # メインアプリケーションのエントリーポイント
+├── internal/                   # 外部からインポートされるべきでないパッケージ
+│   ├── domain/                 # ドメインモデル
+│   ├── biginterface/           # Big Interfaceアプローチの実装
+│   │   ├── datastore.go        # 大きなインターフェース定義
+│   │   └── service.go          # サービス実装
+│   └── smallinterface/         # Small Interfaceアプローチの実装
+│       ├── userstore.go        # ユーザー関連の小さなインターフェース
+│       ├── todostore.go        # Todo関連の小さなインターフェース
+│       └── service.go          # サービス実装
+├── pkg/                        # 外部からインポートできるパッケージ
+│   └── models/                 # 共通モデル
+├── go.mod                      # Goモジュール定義
+├── go.sum                      # 依存関係のチェックサム
+└── README.md                   # このファイル
 ```
 
 ## ライセンス
