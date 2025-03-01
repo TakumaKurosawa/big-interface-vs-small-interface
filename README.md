@@ -136,6 +136,8 @@ There are significant differences between the two approaches, especially in unit
 5. **Disadvantage: Managing Multiple Mock Objects**
    - Setup code increases slightly due to handling multiple interfaces
 
+For more detailed comparisons with specific examples, see the [Comparative Testing Examples](internal/services/comparative_testing_example.md) document, which illustrates how both approaches handle real-world scenarios like adding new features, maintaining mocks, and dealing with interface changes.
+
 ## Test Code Examples
 
 ### Big Interface Test Example (Partial)
@@ -207,6 +209,7 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 │   │   └── smallinterface/  # Services using small interface
 │   │       ├── service.go
 │   │       └── service_test.go
+│   │   └── comparative_testing_example.md  # Detailed comparison document
 │   └── infra/               # Infrastructure implementations
 │       └── inmemory/        # In-memory implementation
 │           └── store.go     # Implements both interfaces
