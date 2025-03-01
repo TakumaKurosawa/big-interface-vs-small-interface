@@ -62,21 +62,19 @@ func TestUserService_GetUser(t *testing.T) {
 		userID          string
 		setupFunc       func(mock *mocks.MockUserStore)
 		expectReturnVal *domain.User
-		expectErr       bool
-		expectedErr     string
+		expectErr       error
 	}{
 		"Success: User exists": {
 			userID:          "user1",
 			setupFunc:       setupUserExists,
 			expectReturnVal: mockUser,
-			expectErr:       false,
+			expectErr:       nil,
 		},
 		"Error: User not found": {
 			userID:          "nonexistent",
 			setupFunc:       setupUserNotFound,
 			expectReturnVal: nil,
-			expectErr:       true,
-			expectedErr:     "user not found",
+			expectErr:       errors.New("user not found"),
 		},
 	}
 
@@ -99,11 +97,9 @@ func TestUserService_GetUser(t *testing.T) {
 			ctx := context.Background()
 			user, err := service.GetUser(ctx, tt.userID)
 
-			if tt.expectErr {
+			if tt.expectErr != nil {
 				require.Error(t, err)
-				if tt.expectedErr != "" {
-					assert.Contains(t, err.Error(), tt.expectedErr)
-				}
+				assert.Contains(t, err.Error(), tt.expectErr.Error())
 				assert.Nil(t, user)
 			} else {
 				require.NoError(t, err)
@@ -162,23 +158,21 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 		setupUserFunc   func(mock *mocks.MockUserStore)
 		setupTodoFunc   func(mock *mocks.MockTodoStore)
 		expectReturnVal []*domain.Todo
-		expectErr       bool
-		expectedErr     string
+		expectErr       error
 	}{
 		"Success: User and todos exist": {
 			userID:          "user1",
 			setupUserFunc:   setupUserExistsForTodos,
 			setupTodoFunc:   setupTodosExist,
 			expectReturnVal: mockTodos,
-			expectErr:       false,
+			expectErr:       nil,
 		},
 		"Error: User not found": {
 			userID:          "nonexistent",
 			setupUserFunc:   setupUserNotFoundForTodos,
 			setupTodoFunc:   setupNoTodos,
 			expectReturnVal: nil,
-			expectErr:       true,
-			expectedErr:     "user not found",
+			expectErr:       errors.New("user not found"),
 		},
 	}
 
@@ -206,11 +200,9 @@ func TestTodoService_GetUserTodos(t *testing.T) {
 			ctx := context.Background()
 			todos, err := service.GetUserTodos(ctx, tt.userID)
 
-			if tt.expectErr {
+			if tt.expectErr != nil {
 				require.Error(t, err)
-				if tt.expectedErr != "" {
-					assert.Contains(t, err.Error(), tt.expectedErr)
-				}
+				assert.Contains(t, err.Error(), tt.expectErr.Error())
 				assert.Nil(t, todos)
 			} else {
 				require.NoError(t, err)
@@ -234,21 +226,19 @@ func setupTodoNotFound(mock *mocks.MockTodoStore) {
 
 func TestTodoService_CompleteTodo(t *testing.T) {
 	tests := map[string]struct {
-		todoID      string
-		setupFunc   func(mock *mocks.MockTodoStore)
-		expectErr   bool
-		expectedErr string
+		todoID    string
+		setupFunc func(mock *mocks.MockTodoStore)
+		expectErr error
 	}{
 		"Success: Todo marked as complete": {
 			todoID:    "todo1",
 			setupFunc: setupTodoMarkComplete,
-			expectErr: false,
+			expectErr: nil,
 		},
 		"Error: Todo not found": {
-			todoID:      "nonexistent",
-			setupFunc:   setupTodoNotFound,
-			expectErr:   true,
-			expectedErr: "todo not found",
+			todoID:    "nonexistent",
+			setupFunc: setupTodoNotFound,
+			expectErr: errors.New("todo not found"),
 		},
 	}
 
@@ -268,11 +258,9 @@ func TestTodoService_CompleteTodo(t *testing.T) {
 			ctx := context.Background()
 			err := service.CompleteTodo(ctx, tt.todoID)
 
-			if tt.expectErr {
+			if tt.expectErr != nil {
 				require.Error(t, err)
-				if tt.expectedErr != "" {
-					assert.Contains(t, err.Error(), tt.expectedErr)
-				}
+				assert.Contains(t, err.Error(), tt.expectErr.Error())
 			} else {
 				require.NoError(t, err)
 			}
